@@ -1138,6 +1138,34 @@ body {
     }
 }
 
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+.portfolio-item,
+.service-card,
+.hero-img {
+    will-change: transform;
+}
+
+.portfolio-item {
+    contain: layout style paint;
+}
+
+.hero-img,
+.about-image img,
+.portfolio-item img {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* ===== CONTACT LINKS STYLING ===== */
+.contact-item a:hover {
+    color: var(--accent-color) !important;
+    text-decoration: underline;
+}
+
+.social-link:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
 /* ===== CUSTOM SCROLLBAR ===== */
 ::-webkit-scrollbar {
     width: 8px;

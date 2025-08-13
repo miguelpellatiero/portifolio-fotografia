@@ -12,8 +12,17 @@ class PhotographerPortfolio {
         this.apiBaseUrl = '/backend';
         this.currentCategory = 'all';
         this.isLoading = false;
+        this.settings = {
+            siteName: 'Lívia Silva Fotografia',
+            siteDescription: 'Capturando momentos únicos através das lentes',
+            contactEmail: 'fotografaliviasilva@gmail.com',
+            contactPhone: '5512920023804',
+            contactInstagram: 'fotografaliviasilva',
+            contactLocation: 'São Paulo, SP'
+        };
         
         this.init();
+        this.loadFromStorage();
         this.loadPhotosFromAPI();
     }
 
@@ -22,6 +31,8 @@ class PhotographerPortfolio {
         this.handleLoading();
         this.setupIntersectionObserver();
         this.setupNavigation();
+        this.optimizePerformance();
+        this.improveAccessibility();
     }
 
     // ===== INITIALIZATION =====
@@ -557,16 +568,73 @@ class PhotographerPortfolio {
         }
 
         try {
-            // Try to send to backend
+            // Try to send to backend first
             await this.apiRequest('POST', '/api/contact', data);
             this.showNotification('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
             e.target.reset();
         } catch (error) {
-            console.warn('Failed to send contact form:', error);
-            // Fallback: show success anyway (for demo purposes)
-            this.showNotification('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
+            console.warn('Backend failed, using fallback methods:', error);
+            
+            // Fallback 1: Create WhatsApp message
+            const whatsappMessage = this.createWhatsAppMessage(data);
+            const whatsappUrl = `https://wa.me/${this.settings.contactPhone}?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            // Fallback 2: Create email mailto link
+            const emailSubject = `Contato do Site - ${data.service ? data.service : 'Geral'}`;
+            const emailBody = this.createEmailMessage(data);
+            const emailUrl = `mailto:${this.settings.contactEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Show options to user
+            const useWhatsApp = confirm('Não foi possível enviar pelo formulário. Gostaria de enviar via WhatsApp? (Cancelar para usar email)');
+            
+            if (useWhatsApp) {
+                window.open(whatsappUrl, '_blank');
+                this.showNotification('Redirecionado para WhatsApp. Complete o envio por lá!', 'success');
+            } else {
+                window.location.href = emailUrl;
+                this.showNotification('Abrindo seu cliente de email...', 'success');
+            }
+            
             e.target.reset();
         }
+    }
+
+    createWhatsAppMessage(data) {
+        return `*Contato do Site - ${this.settings.siteName}*
+
+` +
+               `*Nome:* ${data.name}
+` +
+               `*Email:* ${data.email}
+` +
+               `${data.phone ? `*Telefone:* ${data.phone}
+` : ''}` +
+               `*Serviço:* ${data.service || 'Não especificado'}
+
+` +
+               `*Mensagem:*
+${data.message}`;
+    }
+
+    createEmailMessage(data) {
+        return `Contato do Site - ${this.settings.siteName}
+
+` +
+               `Nome: ${data.name}
+` +
+               `Email: ${data.email}
+` +
+               `${data.phone ? `Telefone: ${data.phone}
+` : ''}` +
+               `Serviço: ${data.service || 'Não especificado'}
+
+` +
+               `Mensagem:
+${data.message}
+
+` +
+               `---
+Enviado através do formulário de contato do site.`;
     }
 
     validateContactForm(data) {
@@ -738,20 +806,16 @@ class PhotographerPortfolio {
         e.preventDefault();
         
         const formData = new FormData(e.target);
-        const settings = Object.fromEntries(formData.entries());
+        const newSettings = Object.fromEntries(formData.entries());
 
-        // Update site title and description
-        document.title = `${settings.siteName} | Capturando Momentos Únicos`;
+        // Update settings object
+        this.settings = { ...this.settings, ...newSettings };
         
-        const heroTitle = document.querySelector('.hero-title .highlight');
-        if (heroTitle) {
-            heroTitle.textContent = settings.siteName;
-        }
-
-        const heroSubtitle = document.querySelector('.hero-subtitle');
-        if (heroSubtitle) {
-            heroSubtitle.textContent = settings.siteDescription;
-        }
+        // Apply settings to UI
+        this.applySettings();
+        
+        // Save to localStorage
+        this.saveToStorage();
 
         this.showNotification('Configurações atualizadas com sucesso!', 'success');
     }
@@ -763,21 +827,28 @@ class PhotographerPortfolio {
         const file = formData.get('heroImage');
         
         if (file && file.size > 0) {
-            const heroUrl = URL.createObjectURL(file);
-            
-            // Update hero image immediately
-            const heroImg = document.querySelector('.hero-img');
-            if (heroImg) {
-                heroImg.src = heroUrl;
-            }
-            
-            // Update preview
-            const preview = document.getElementById('heroImagePreview');
-            if (preview) {
-                preview.src = heroUrl;
-            }
-            
-            this.showNotification('Foto da home atualizada com sucesso!', 'success');
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const heroUrl = event.target.result;
+                
+                // Update hero image immediately
+                const heroImg = document.querySelector('.hero-img');
+                if (heroImg) {
+                    heroImg.src = heroUrl;
+                }
+                
+                // Update preview
+                const preview = document.getElementById('heroImagePreview');
+                if (preview) {
+                    preview.src = heroUrl;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('photographerHeroImage', heroUrl);
+                
+                this.showNotification('Foto da home atualizada com sucesso!', 'success');
+            };
+            reader.readAsDataURL(file);
             e.target.reset();
         } else {
             this.showNotification('Por favor, selecione uma imagem.', 'error');
@@ -818,17 +889,165 @@ class PhotographerPortfolio {
             stats[2].textContent = data.statAwards + '+';
         }
         
+        // Prepare about data for storage
+        const aboutData = {
+            description: data.aboutDescription,
+            stats: {
+                projects: data.statProjects,
+                experience: data.statExperience,
+                awards: data.statAwards
+            }
+        };
+        
         // Handle about image if provided
         const aboutImageFile = formData.get('aboutImage');
         if (aboutImageFile && aboutImageFile.size > 0) {
-            const aboutImageUrl = URL.createObjectURL(aboutImageFile);
-            const aboutImg = document.querySelector('.about-image img');
-            if (aboutImg) {
-                aboutImg.src = aboutImageUrl;
-            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const aboutImageUrl = event.target.result;
+                const aboutImg = document.querySelector('.about-image img');
+                if (aboutImg) {
+                    aboutImg.src = aboutImageUrl;
+                }
+                aboutData.image = aboutImageUrl;
+                localStorage.setItem('photographerAbout', JSON.stringify(aboutData));
+            };
+            reader.readAsDataURL(aboutImageFile);
+        } else {
+            localStorage.setItem('photographerAbout', JSON.stringify(aboutData));
         }
         
         this.showNotification('Seção "Sobre Mim" atualizada com sucesso!', 'success');
+        this.saveToStorage();
+    }
+
+    // ===== LOCALSTORAGE PERSISTENCE =====
+    loadFromStorage() {
+        try {
+            // Load settings
+            const savedSettings = localStorage.getItem('photographerSettings');
+            if (savedSettings) {
+                this.settings = { ...this.settings, ...JSON.parse(savedSettings) };
+                this.applySettings();
+            }
+
+            // Load photos
+            const savedPhotos = localStorage.getItem('photographerPhotos');
+            if (savedPhotos) {
+                const photos = JSON.parse(savedPhotos);
+                if (photos.length > 0) {
+                    this.photos = photos;
+                    this.filteredPhotos = [...this.photos];
+                }
+            }
+
+            // Load about content
+            const savedAbout = localStorage.getItem('photographerAbout');
+            if (savedAbout) {
+                const aboutData = JSON.parse(savedAbout);
+                this.applyAboutData(aboutData);
+            }
+
+            // Load hero image
+            const savedHeroImage = localStorage.getItem('photographerHeroImage');
+            if (savedHeroImage) {
+                const heroImg = document.querySelector('.hero-img');
+                if (heroImg) heroImg.src = savedHeroImage;
+            }
+        } catch (error) {
+            console.warn('Error loading from localStorage:', error);
+        }
+    }
+
+    saveToStorage() {
+        try {
+            localStorage.setItem('photographerSettings', JSON.stringify(this.settings));
+            localStorage.setItem('photographerPhotos', JSON.stringify(this.photos));
+        } catch (error) {
+            console.warn('Error saving to localStorage:', error);
+        }
+    }
+
+    applySettings() {
+        // Update contact information
+        this.updateContactInfo();
+        
+        // Update site title and description
+        document.title = `${this.settings.siteName} | Photography Portfolio`;
+        
+        const heroTitle = document.querySelector('.hero-title .highlight');
+        if (heroTitle) {
+            heroTitle.textContent = this.settings.siteName.split(' ')[0] || 'Momentos';
+        }
+
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        if (heroSubtitle) {
+            heroSubtitle.textContent = this.settings.siteDescription;
+        }
+    }
+
+    updateContactInfo() {
+        // Update email links
+        const emailElements = document.querySelectorAll('[href^="mailto:"]');
+        emailElements.forEach(el => {
+            el.href = `mailto:${this.settings.contactEmail}?subject=Interesse em Serviços de Fotografia`;
+            if (el.textContent.includes('@')) {
+                el.textContent = this.settings.contactEmail;
+            }
+        });
+
+        // Update WhatsApp links
+        const whatsappElements = document.querySelectorAll('[href*="wa.me"]');
+        whatsappElements.forEach(el => {
+            el.href = `https://wa.me/${this.settings.contactPhone}?text=Olá! Gostaria de saber mais sobre seus serviços de fotografia.`;
+            if (el.textContent.includes('+55')) {
+                const formatted = this.formatPhoneNumber(this.settings.contactPhone);
+                el.textContent = formatted;
+            }
+        });
+
+        // Update Instagram link
+        const instagramLink = document.getElementById('instagramLink');
+        if (instagramLink) {
+            instagramLink.href = `https://instagram.com/${this.settings.contactInstagram}`;
+        }
+
+        // Update location
+        const locationElements = document.querySelectorAll('.contact-item p');
+        locationElements.forEach(el => {
+            if (el.textContent.includes('SP') || el.textContent.includes('São Paulo')) {
+                el.textContent = this.settings.contactLocation;
+            }
+        });
+    }
+
+    formatPhoneNumber(phone) {
+        // Format phone number from 5511999999999 to +55 (11) 99999-9999
+        if (phone.length === 13 && phone.startsWith('55')) {
+            return `+${phone.substring(0,2)} (${phone.substring(2,4)}) ${phone.substring(4,9)}-${phone.substring(9)}`;
+        }
+        return phone;
+    }
+
+    applyAboutData(aboutData) {
+        if (aboutData.description) {
+            const aboutDesc = document.querySelector('.about-description');
+            if (aboutDesc) aboutDesc.textContent = aboutData.description;
+        }
+
+        if (aboutData.stats) {
+            const stats = document.querySelectorAll('.stat h3');
+            if (stats.length >= 3) {
+                stats[0].textContent = aboutData.stats.projects + '+';
+                stats[1].textContent = aboutData.stats.experience + '+';
+                stats[2].textContent = aboutData.stats.awards + '+';
+            }
+        }
+
+        if (aboutData.image) {
+            const aboutImg = document.querySelector('.about-image img');
+            if (aboutImg) aboutImg.src = aboutData.image;
+        }
     }
 
     // ===== UTILITY FUNCTIONS =====

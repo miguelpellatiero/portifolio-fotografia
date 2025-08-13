@@ -219,7 +219,7 @@
                         <div class="contact-icon">📧</div>
                         <div>
                             <h4>Email</h4>
-                            <p>fotografaliviasilva@gmail.com</p>
+                            <a href="mailto:fotografaliviasilva@gmail.com?subject=Interesse em Serviços de Fotografia" style="color: var(--text-light); text-decoration: none;">fotografaliviasilva@gmail.com</a>
                         </div>
                     </div>
                     
@@ -227,7 +227,7 @@
                         <div class="contact-icon">📱</div>
                         <div>
                             <h4>Telefone</h4>
-                            <p>+55 (12) 92002-3804</p>
+                            <a href="https://wa.me/5512920023804?text=Olá! Gostaria de saber mais sobre seus serviços de fotografia." target="_blank" style="color: var(--text-light); text-decoration: none;">+55 (12) 92002-3804</a>
                         </div>
                     </div>
                     
@@ -240,9 +240,9 @@
                     </div>
                     
                     <div class="social-links">
-                        <a href="#" class="social-link">Instagram</a>
-                        <a href="#" class="social-link">Facebook</a>
-                        <a href="#" class="social-link">WhatsApp</a>
+                        <a href="https://instagram.com/fotografaliviasilva" class="social-link" id="instagramLink" target="_blank">Instagram</a>
+                        <a href="mailto:fotografaliviasilva@gmail.com" class="social-link" id="emailLink">Email</a>
+                        <a href="https://wa.me/5512920023804?text=Olá! Gostaria de saber mais sobre seus serviços de fotografia." class="social-link" id="whatsappLink" target="_blank">WhatsApp</a>
                     </div>
                 </div>
                 
@@ -412,12 +412,34 @@
                     <form id="settingsForm">
                         <div class="form-group">
                             <label for="siteName">Nome do Site</label>
-                            <input type="text" id="siteName" name="siteName" value="Fotógrafo Portfólio">
+                            <input type="text" id="siteName" name="siteName" value="Lívia Silva Fotografia">
                         </div>
                         
                         <div class="form-group">
                             <label for="siteDescription">Descrição</label>
                             <textarea id="siteDescription" name="siteDescription" rows="3">Capturando momentos únicos através das lentes</textarea>
+                        </div>
+                        
+                        <h4 style="margin-top: 30px; margin-bottom: 15px;">Informações de Contato</h4>
+                        
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" name="contactEmail" value="fotografaliviasilva@gmail.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactPhone">Telefone (formato: 5512920023804)</label>
+                            <input type="text" id="contactPhone" name="contactPhone" value="5512920023804" placeholder="5511999999999">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactInstagram">Instagram (sem @)</label>
+                            <input type="text" id="contactInstagram" name="contactInstagram" value="fotografaliviasilva" placeholder="seuusuario">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactLocation">Localização</label>
+                            <input type="text" id="contactLocation" name="contactLocation" value="São Paulo, SP">
                         </div>
                         
                         <button type="submit" class="btn btn-primary">Salvar Configurações</button>
