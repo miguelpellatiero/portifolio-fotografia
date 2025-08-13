@@ -219,7 +219,7 @@
                         <div class="contact-icon">📧</div>
                         <div>
                             <h4>Email</h4>
-                            <p>contato@fotografo.com</p>
+                            <p>fotografaliviasilva@gmail.com</p>
                         </div>
                     </div>
                     
@@ -227,7 +227,7 @@
                         <div class="contact-icon">📱</div>
                         <div>
                             <h4>Telefone</h4>
-                            <p>+55 (11) 99999-9999</p>
+                            <p>+55 (12) 92002-3804</p>
                         </div>
                     </div>
                     
@@ -303,6 +303,8 @@
                 
                 <div class="admin-tabs">
                     <button class="tab-btn active" data-tab="photos">Gerenciar Fotos</button>
+                    <button class="tab-btn" data-tab="hero">Foto da Home</button>
+                    <button class="tab-btn" data-tab="about">Sobre Mim</button>
                     <button class="tab-btn" data-tab="settings">Configurações</button>
                 </div>
                 
@@ -345,6 +347,64 @@
                             <!-- Photos will be loaded here -->
                         </div>
                     </div>
+                </div>
+                
+                <div class="tab-content" id="heroTab" style="display: none;">
+                    <h3>Gerenciar Foto da Página Inicial</h3>
+                    <form id="heroImageForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="heroImageFile">Nova Foto da Home</label>
+                            <input type="file" id="heroImageFile" name="heroImage" accept="image/*" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="heroImagePreview">Preview Atual:</label>
+                            <img id="heroImagePreview" src="assets/hero-image.jpg" alt="Foto atual da home" style="
+                                width: 100%;
+                                max-width: 400px;
+                                height: 200px;
+                                object-fit: cover;
+                                border-radius: 8px;
+                                border: 2px solid #ddd;
+                            ">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Atualizar Foto da Home</button>
+                    </form>
+                </div>
+                
+                <div class="tab-content" id="aboutTab" style="display: none;">
+                    <h3>Editar Seção "Sobre Mim"</h3>
+                    <form id="aboutForm">
+                        <div class="form-group">
+                            <label for="aboutDescription">Descrição Principal</label>
+                            <textarea id="aboutDescription" name="aboutDescription" rows="4" placeholder="Conte sua história, experiência e paixão pela fotografia...">Há mais de 10 anos documentando histórias através das lentes. Especializo-me em capturar a essência genuína de cada momento, criando imagens que transcendem o tempo e tocam a alma.</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="aboutImage">Foto do Sobre Mim</label>
+                            <input type="file" id="aboutImage" name="aboutImage" accept="image/*">
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                            <div class="form-group">
+                                <label for="statProjects">Número de Projetos</label>
+                                <input type="number" id="statProjects" name="statProjects" value="500" min="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="statExperience">Anos de Experiência</label>
+                                <input type="number" id="statExperience" name="statExperience" value="10" min="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="statAwards">Prêmios Recebidos</label>
+                                <input type="number" id="statAwards" name="statAwards" value="50" min="0">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Atualizar Sobre Mim</button>
+                    </form>
                 </div>
                 
                 <div class="tab-content" id="settingsTab" style="display: none;">

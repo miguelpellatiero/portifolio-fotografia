@@ -94,6 +94,24 @@ class PhotographerPortfolio {
             this.handleSettingsUpdate(e);
         });
 
+        // Hero image form
+        const heroImageForm = document.getElementById('heroImageForm');
+        heroImageForm?.addEventListener('submit', (e) => {
+            this.handleHeroImageUpdate(e);
+        });
+
+        // About form
+        const aboutForm = document.getElementById('aboutForm');
+        aboutForm?.addEventListener('submit', (e) => {
+            this.handleAboutUpdate(e);
+        });
+
+        // Preview hero image when selected
+        const heroImageFile = document.getElementById('heroImageFile');
+        heroImageFile?.addEventListener('change', (e) => {
+            this.previewHeroImage(e);
+        });
+
         // Modal events
         const modal = document.getElementById('imageModal');
         const closeModal = document.querySelector('.close-modal');
@@ -736,6 +754,81 @@ class PhotographerPortfolio {
         }
 
         this.showNotification('Configurações atualizadas com sucesso!', 'success');
+    }
+
+    handleHeroImageUpdate(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const file = formData.get('heroImage');
+        
+        if (file && file.size > 0) {
+            const heroUrl = URL.createObjectURL(file);
+            
+            // Update hero image immediately
+            const heroImg = document.querySelector('.hero-img');
+            if (heroImg) {
+                heroImg.src = heroUrl;
+            }
+            
+            // Update preview
+            const preview = document.getElementById('heroImagePreview');
+            if (preview) {
+                preview.src = heroUrl;
+            }
+            
+            this.showNotification('Foto da home atualizada com sucesso!', 'success');
+            e.target.reset();
+        } else {
+            this.showNotification('Por favor, selecione uma imagem.', 'error');
+        }
+    }
+
+    previewHeroImage(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('heroImagePreview');
+                if (preview) {
+                    preview.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    handleAboutUpdate(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Update about description
+        const aboutDesc = document.querySelector('.about-description');
+        if (aboutDesc && data.aboutDescription) {
+            aboutDesc.textContent = data.aboutDescription;
+        }
+        
+        // Update statistics
+        const stats = document.querySelectorAll('.stat h3');
+        if (stats.length >= 3) {
+            stats[0].textContent = data.statProjects + '+';
+            stats[1].textContent = data.statExperience + '+';
+            stats[2].textContent = data.statAwards + '+';
+        }
+        
+        // Handle about image if provided
+        const aboutImageFile = formData.get('aboutImage');
+        if (aboutImageFile && aboutImageFile.size > 0) {
+            const aboutImageUrl = URL.createObjectURL(aboutImageFile);
+            const aboutImg = document.querySelector('.about-image img');
+            if (aboutImg) {
+                aboutImg.src = aboutImageUrl;
+            }
+        }
+        
+        this.showNotification('Seção "Sobre Mim" atualizada com sucesso!', 'success');
     }
 
     // ===== UTILITY FUNCTIONS =====
