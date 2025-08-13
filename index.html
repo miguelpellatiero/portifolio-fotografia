@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miguel Pellatie | Photography Portfolio</title>
+    <meta name="description" content="Portfólio profissional de fotografia. Explore meu trabalho e entre em contato para seus projetos especiais.">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Fotógrafo Portfólio">
+    <meta property="og:description" content="Capturando momentos únicos através das lentes">
+    <meta property="og:image" content="assets/og-image.jpg">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="camera-icon">📷</div>
+            <p>Carregando portfólio...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>MP</h2>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Início</a>
+                <a href="#about" class="nav-link">Sobre</a>
+                <a href="#portfolio" class="nav-link">Portfólio</a>
+                <a href="#services" class="nav-link">Serviços</a>
+                <a href="#contact" class="nav-link">Contato</a>
+                <a href="#admin" class="nav-link admin-link">Admin</a>
+            </div>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line">Capturando</span>
+                    <span class="title-line highlight">Momentos</span>
+                    <span class="title-line">Únicos</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Transformo instantes em memórias eternas através da arte da fotografia
+                </p>
+                <div class="hero-buttons">
+                    <a href="#portfolio" class="btn btn-primary">Ver Portfólio</a>
+                    <a href="#contact" class="btn btn-outline">Entrar em Contato</a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="image-placeholder">
+                    <img src="assets/hero-image.jpg" alt="Fotografia principal" class="hero-img" loading="lazy">
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <span>Role para explorar</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Sobre Mim</h2>
+                <p class="section-subtitle">Conheça minha trajetória na fotografia</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-description">
+                        Há mais de 10 anos documentando histórias através das lentes. 
+                        Especializo-me em capturar a essência genuína de cada momento, 
+                        criando imagens que transcendem o tempo e tocam a alma.
+                    </p>
+                    
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>500+</h3>
+                            <p>Projetos Realizados</p>
+                        </div>
+                        <div class="stat">
+                            <h3>10+</h3>
+                            <p>Anos de Experiência</p>
+                        </div>
+                        <div class="stat">
+                            <h3>50+</h3>
+                            <p>Prêmios Recebidos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="assets/photographer.jpg" alt="Fotógrafo" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Meu Portfólio</h2>
+                <p class="section-subtitle">Uma seleção dos meus melhores trabalhos</p>
+            </div>
+            
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="wedding">Casamentos</button>
+                <button class="filter-btn" data-filter="portrait">Retratos</button>
+                <button class="filter-btn" data-filter="landscape">Paisagens</button>
+                <button class="filter-btn" data-filter="event">Eventos</button>
+            </div>
+            
+            <div class="portfolio-grid" id="portfolioGrid">
+                <!-- Portfolio items will be loaded dynamically -->
+            </div>
+            
+            <div class="load-more-container">
+                <button class="btn btn-outline" id="loadMoreBtn">Carregar Mais</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Meus Serviços</h2>
+                <p class="section-subtitle">Soluções completas em fotografia</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">💒</div>
+                    <h3>Casamentos</h3>
+                    <p>Documentação completa do seu dia especial, capturando cada emoção e momento único.</p>
+                    <ul>
+                        <li>Ensaio pré-wedding</li>
+                        <li>Cerimônia completa</li>
+                        <li>Recepção e festa</li>
+                        <li>Álbum personalizado</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">👤</div>
+                    <h3>Retratos</h3>
+                    <p>Sessões personalizadas que revelam sua essência e personalidade única.</p>
+                    <ul>
+                        <li>Retratos individuais</li>
+                        <li>Ensaios familiares</li>
+                        <li>Fotos corporativas</li>
+                        <li>Book profissional</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🎉</div>
+                    <h3>Eventos</h3>
+                    <p>Cobertura profissional de eventos corporativos e sociais.</p>
+                    <ul>
+                        <li>Eventos corporativos</li>
+                        <li>Festas e celebrações</li>
+                        <li>Conferências</li>
+                        <li>Formaturas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Vamos Conversar</h2>
+                <p class="section-subtitle">Entre em contato para discutir seu projeto</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Informações de Contato</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contato@fotografo.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <h4>Telefone</h4>
+                            <p>+55 (11) 99999-9999</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <h4>Localização</h4>
+                            <p>São Paulo, SP</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">WhatsApp</a>
+                    </div>
+                </div>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service">Tipo de Serviço</label>
+                        <select id="service" name="service" required>
+                            <option value="">Selecione um serviço</option>
+                            <option value="wedding">Casamento</option>
+                            <option value="portrait">Retrato</option>
+                            <option value="event">Evento</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mensagem</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Conte-me mais sobre seu projeto..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Section -->
+    <section id="admin" class="admin-section">
+        <div class="container">
+            <div class="admin-login" id="adminLogin">
+                <h2>Acesso Administrativo</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="adminPassword">Senha</label>
+                        <input type="password" id="adminPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+            
+            <div class="admin-panel" id="adminPanel" style="display: none;">
+                <h2>Painel Administrativo</h2>
+                
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="photos">Gerenciar Fotos</button>
+                    <button class="tab-btn" data-tab="settings">Configurações</button>
+                </div>
+                
+                <div class="tab-content" id="photosTab">
+                    <div class="upload-section">
+                        <h3>Adicionar Nova Foto</h3>
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="photoFile">Arquivo da Foto</label>
+                                <input type="file" id="photoFile" name="photo" accept="image/*" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="photoTitle">Título</label>
+                                <input type="text" id="photoTitle" name="title" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="photoCategory">Categoria</label>
+                                <select id="photoCategory" name="category" required>
+                                    <option value="wedding">Casamento</option>
+                                    <option value="portrait">Retrato</option>
+                                    <option value="landscape">Paisagem</option>
+                                    <option value="event">Evento</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="photoDescription">Descrição</label>
+                                <textarea id="photoDescription" name="description" rows="3"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Adicionar Foto</button>
+                        </form>
+                    </div>
+                    
+                    <div class="photos-management">
+                        <h3>Fotos Existentes</h3>
+                        <div id="adminPhotosList">
+                            <!-- Photos will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="settingsTab" style="display: none;">
+                    <h3>Configurações do Site</h3>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="siteName">Nome do Site</label>
+                            <input type="text" id="siteName" name="siteName" value="Fotógrafo Portfólio">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="siteDescription">Descrição</label>
+                            <textarea id="siteDescription" name="siteDescription" rows="3">Capturando momentos únicos através das lentes</textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Fotógrafo Portfólio. Todos os direitos reservados.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#privacy">Privacidade</a>
+                    <a href="#terms">Termos</a>
+                    <a href="#contact">Contato</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="" alt="" id="modalImage">
+            <div class="modal-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDescription"></p>
+            </div>
+            <div class="modal-nav">
+                <button class="nav-btn prev-btn" id="prevBtn">❮</button>
+                <button class="nav-btn next-btn" id="nextBtn">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

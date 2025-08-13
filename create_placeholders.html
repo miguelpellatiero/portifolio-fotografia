@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Placeholder Images</title>
+    <style>
+        .placeholder {
+            width: 600px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .wedding { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
+        .portrait { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
+        .landscape { background: linear-gradient(135deg, #45b7d1, #096dd9); }
+        .event { background: linear-gradient(135deg, #96ceb4, #ffeaa7); color: #2d3436; }
+        
+        .hero { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .photographer { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .og-image { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .favicon { background: linear-gradient(135deg, #43e97b, #38f9d7); width: 64px; height: 64px; font-size: 12px; }
+        .placeholder-main { background: linear-gradient(135deg, #fa709a, #fee140); }
+    </style>
+</head>
+<body>
+    <h1>Right-click each image and save as the filename shown:</h1>
+    
+    <div class="placeholder wedding">
+        <div>Wedding Photography<br><small>Save as: wedding1.jpg</small></div>
+    </div>
+    
+    <div class="placeholder wedding">
+        <div>Beach Wedding<br><small>Save as: wedding2.jpg</small></div>
+    </div>
+    
+    <div class="placeholder wedding">
+        <div>Traditional Ceremony<br><small>Save as: wedding3.jpg</small></div>
+    </div>
+    
+    <div class="placeholder portrait">
+        <div>Professional Portrait<br><small>Save as: portrait1.jpg</small></div>
+    </div>
+    
+    <div class="placeholder portrait">
+        <div>Family Portrait<br><small>Save as: portrait2.jpg</small></div>
+    </div>
+    
+    <div class="placeholder landscape">
+        <div>Sunset Landscape<br><small>Save as: landscape1.jpg</small></div>
+    </div>
+    
+    <div class="placeholder landscape">
+        <div>Mystic Forest<br><small>Save as: landscape2.jpg</small></div>
+    </div>
+    
+    <div class="placeholder event">
+        <div>Corporate Event<br><small>Save as: event1.jpg</small></div>
+    </div>
+    
+    <div class="placeholder event">
+        <div>Birthday Party<br><small>Save as: event2.jpg</small></div>
+    </div>
+    
+    <div class="placeholder hero">
+        <div>Hero Image<br><small>Save as: hero-image.jpg (in assets folder)</small></div>
+    </div>
+    
+    <div class="placeholder photographer">
+        <div>Photographer<br><small>Save as: photographer.jpg (in assets folder)</small></div>
+    </div>
+    
+    <div class="placeholder og-image">
+        <div>Social Media Preview<br><small>Save as: og-image.jpg (in assets folder)</small></div>
+    </div>
+    
+    <div class="placeholder placeholder-main">
+        <div>Placeholder Image<br><small>Save as: placeholder.jpg (in assets folder)</small></div>
+    </div>
+    
+    <div class="placeholder favicon">
+        <div>📷</div>
+    </div>
+    <p><small>Save favicon as: favicon.ico (in assets folder)</small></p>
+    
+    <script>
+        // Convert divs to canvas and create download links
+        document.addEventListener('DOMContentLoaded', function() {
+            const placeholders = document.querySelectorAll('.placeholder');
+            placeholders.forEach((div, index) => {
+                const button = document.createElement('button');
+                button.textContent = 'Download as Image';
+                button.style.margin = '10px';
+                button.onclick = function() {
+                    html2canvas(div).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = div.textContent.split('Save as: ')[1] || 'image.jpg';
+                        link.href = canvas.toDataURL();
+                        link.click();
+                    });
+                };
+                div.parentNode.insertBefore(button, div.nextSibling);
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
